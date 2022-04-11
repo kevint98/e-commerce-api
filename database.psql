@@ -1,0 +1,53 @@
+CREATE TABLE IF NOT EXISTS users (
+    id              SERIAL              PRIMARY KEY,
+    email           VARCHAR(100)        NOT NULL,
+    password        TEXT                NOT NULL,
+    firstName       VARCHAR(50)         NOT NULL,
+    lastName        VARCHAR(50)         NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    id              SERIAL              PRIMARY KEY,
+    name            VARCHAR(50)         NOT NULL,
+    description     VARCHAR(100)        NOT NULL,
+    price           INT(50)             NOT NULL,
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id              SERIAL              PRIMARY KEY,
+    total           INT                 NOT NULL,
+    status          VARCHAR(50)         NOT NULL,
+    userID          INT                 NOT NULL
+    created         DATE                NOT NULL,
+    modified        DATE                NOT NULL,
+    FOREIGN KEY (userID) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS orderItems (
+    id              SERIAL              PRIMARY KEY,
+    qty             INT                 NOT NULL,
+    price           INT                 NOT NULL,
+    name            VARCHAR(50)         NOT NULL
+    description     VARCHAR(100)        NOT NULL,
+    orderID         INT                 NOT NULL,
+    productID       INT                 NOT NULL,
+    FOREIGN KEY (orderID) REFERENCES orders(id),
+    FOREIGN KEY (productID) REFERENCES products(id)
+);
+
+CREATE TABLE IF NOT EXISTS carts (
+    id              SERIAL              PRIMARY KEY,
+    userID          INT                 NOT NULL,
+    created         DATE                NOT NULL,
+    modified        DATE                NOT NULL,
+    FOREIGN KEY (userID) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS cartItems(
+    id              SERIAL              PRIMARY KEY,
+    productID       INT                 NOT NULL,
+    cartID          INT                 NOT NULL,
+    qty             INT                 NOT NULL,
+    FOREIGN KEY (cartID) REFERENCES carts(id),
+    FOREIGN KEY (productID) REFERENCES products(id)
+);
